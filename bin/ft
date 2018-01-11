@@ -1,0 +1,42 @@
+#!/usr/bin/env node
+
+const inquirer = require('inquirer');
+const { Spinner } = require('cli-spinner');
+
+const list = require('../controllers/list');
+const article = require('../controllers/article');
+
+const spinner = new Spinner('loading…');
+
+Promise.resolve()
+	.then(() => {
+		spinner.start();
+
+		return list();
+	})
+	.then((choices) => {
+		spinner.stop(true);
+
+		return inquirer.prompt({
+			type: 'list',
+			name: 'guid',
+			message: 'Latest news:',
+			choices
+		});
+	})
+	.then((guid) => {
+		spinner.start();
+		return article(guid);
+	})
+	.then((content) => {
+		spinner.stop(true);
+		console.log(content);
+	})
+	.catch((error) => {
+		if (spinner.isSpinning) {
+			spinner.stop(true);
+		}
+
+		console.error(`Oh no, something went wrong: ${error}`);
+		process.exit(1);
+	});

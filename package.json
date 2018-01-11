@@ -1,0 +1,23 @@
+{
+  "name": "ft-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "ft": "bin/ft"
+  },
+  "dependencies": {
+    "cli-spinner": "^0.2.7",
+    "feedme": "^1.1.0",
+    "http-errors": "^1.6.2",
+    "inquirer": "^5.0.0",
+    "unescape": "^1.0.1",
+    "word-wrap": "^1.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
