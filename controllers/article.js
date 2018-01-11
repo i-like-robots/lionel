@@ -16,7 +16,7 @@ const FIELDS = [
 ];
 
 module.exports = (guid) => {
-	return fetchJSON(`https://next-elastic.ft.com/content/item/${guid}/_source?_source=${FIELDS}`)
+	return fetchJSON(`http://next-elastic.ft.com/content/item/${guid}/_source?_source=${FIELDS}`)
 		.then((data) => {
 			if (data.type !== 'article') {
 				return Promise.reject('The requested content is not an article.');
