@@ -14,14 +14,14 @@ Promise.resolve()
 
 		return list();
 	})
-	.then((choices) => {
+	.then(({ choices, message }) => {
 		spinner.stop(true);
 
 		return inquirer.prompt({
+			message,
+			choices,
 			type: 'list',
-			name: 'guid',
-			message: 'Latest news:',
-			choices
+			name: 'guid'
 		});
 	})
 	.then((guid) => {
