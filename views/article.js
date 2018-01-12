@@ -1,10 +1,7 @@
 const chalk = require('chalk');
 const wrap = require('word-wrap');
 
-const display = {
-	width: 100,
-	indent: '  '
-};
+const RHYTHM = '\n\n';
 
 const header = (model) => {
 	const partial = [];
@@ -22,12 +19,11 @@ const subheader = (model) => {
 
 	if (model.displayConcept) {
 		partial.push('in');
-
-		if (model.displayConceptPrefix) {
-			partial.push(chalk.magentaBright(model.displayConceptPrefix));
-		}
-
 		partial.push(chalk.bold(model.displayConcept));
+	}
+
+	if (model.displayConceptPrefix) {
+		partial.push(`(${chalk.magentaBright(model.displayConceptPrefix)})`);
 	}
 
 	return chalk.magenta(partial.join(' '));
@@ -38,11 +34,11 @@ module.exports = (model) => {
 
 	template.push(header(model));
 
-	template.push(subhead(model));
+	template.push(subheader(model));
 
-	template.push(model.bodyText);
+	template.push(wrap(model.bodyText, { width: 80, indent: '' }));
 
-	template.push(chalk.yellow(`View the article at ${url}`));
+	template.push(chalk.yellow(`View the article at ${model.url}`));
 
-	return wrap(template.join('\n\n'), display);
+	return RHYTHM + template.join(RHYTHM) + RHYTHM;
 };

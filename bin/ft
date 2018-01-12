@@ -3,15 +3,21 @@
 const inquirer = require('inquirer');
 const ora = require('ora');
 
+const Scrollable = require('../lib/scrollable');
 const list = require('../controllers/list');
 const article = require('../controllers/article');
 
 const spinner = ora('Loading…');
 
-Promise.resolve()
+const title = (text) => {
+	process.stdout.write('\x1b]2;' + text + '\x1b\x5c');
+};
+
+const app = () => (
+	Promise.resolve()
+
 	.then(() => {
 		spinner.start();
-
 		return list();
 	})
 	.then(({ choices, message }) => {
@@ -30,13 +36,39 @@ Promise.resolve()
 	})
 	.then((content) => {
 		spinner.stop();
-		console.log(content);
+
+		return new Promise((resolve) => {
+			const scrollable = new Scrollable(content, resolve);
+			return scrollable.start();
+		});
+	})
+	.then((more) => {
+		return more && app();
+	})
+);
+
+const task = () => (
+	Promise.resolve()
+
+	.then(() => {
+		// Set the window title
+		title('FT 📰');
+		return app();
+	})
+
+	.then(() => {
+		// Reset the window title
+		title('');
+		process.exit();
 	})
 	.catch((error) => {
 		if (spinner.enabled) {
 			spinner.fail();
 		}
 
-		console.error(`Oh no, something went wrong: ${error}`);
+		process.stderr.write(`Oh no, something went wrong: ${error}`);
 		process.exit(1);
-	});
+	})
+);
+
+task();
