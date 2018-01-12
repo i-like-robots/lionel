@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 const inquirer = require('inquirer');
-const { Spinner } = require('cli-spinner');
+const ora = require('ora');
 
 const list = require('../controllers/list');
 const article = require('../controllers/article');
 
-const spinner = new Spinner('loading…');
+const spinner = ora('Loading…');
 
 Promise.resolve()
 	.then(() => {
@@ -15,7 +15,7 @@ Promise.resolve()
 		return list();
 	})
 	.then(({ choices, message }) => {
-		spinner.stop(true);
+		spinner.stop();
 
 		return inquirer.prompt({
 			message,
@@ -24,17 +24,17 @@ Promise.resolve()
 			name: 'guid'
 		});
 	})
-	.then((guid) => {
+	.then(({ guid }) => {
 		spinner.start();
 		return article(guid);
 	})
 	.then((content) => {
-		spinner.stop(true);
+		spinner.stop();
 		console.log(content);
 	})
 	.catch((error) => {
-		if (spinner.isSpinning) {
-			spinner.stop(true);
+		if (spinner.enabled) {
+			spinner.fail();
 		}
 
 		console.error(`Oh no, something went wrong: ${error}`);
