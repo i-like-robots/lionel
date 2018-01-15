@@ -8,10 +8,6 @@ const article = require('../controllers/article');
 
 const spinner = require('ora')('Loading…');
 
-const title = (text) => {
-	process.stdout.write('\x1b]2;' + text + '\x1b\x5c');
-};
-
 const app = () => (
 	Promise.resolve()
 
@@ -46,14 +42,10 @@ const task = () => (
 	Promise.resolve()
 
 	.then(() => {
-		// Set the window title
-		title('FT 📰');
 		return app();
 	})
 
 	.then(() => {
-		// Reset the window title
-		title('');
 		process.exit();
 	})
 	.catch((error) => {
