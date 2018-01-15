@@ -1,27 +1,25 @@
 #!/usr/bin/env node
 
-const inquirer = require('inquirer');
-const ora = require('ora');
+const Menu = require('../lib/ui/menu');
+const Scrollable = require('../lib/ui/scrollable');
 
 const list = require('../controllers/list');
 const article = require('../controllers/article');
 
-const spinner = ora('Loading…');
+const spinner = require('ora')('Loading…');
 
-Promise.resolve()
+const app = () => (
+	Promise.resolve()
+
 	.then(() => {
 		spinner.start();
-
 		return list();
 	})
-	.then(({ choices, message }) => {
+	.then(({ prompt, choices }) => {
 		spinner.stop();
 
-		return inquirer.prompt({
-			message,
-			choices,
-			type: 'list',
-			name: 'guid'
+		return new Promise((resolve) => {
+			new Menu(prompt, choices, { callback: resolve });
 		});
 	})
 	.then(({ guid }) => {
@@ -30,13 +28,34 @@ Promise.resolve()
 	})
 	.then((content) => {
 		spinner.stop();
-		console.log(content);
+
+		return new Promise((resolve) => {
+			new Scrollable(content, { callback: resolve });
+		});
+	})
+	.then(() => {
+		return app();
+	})
+);
+
+const task = () => (
+	Promise.resolve()
+
+	.then(() => {
+		return app();
+	})
+
+	.then(() => {
+		process.exit();
 	})
 	.catch((error) => {
 		if (spinner.enabled) {
 			spinner.fail();
 		}
 
-		console.error(`Oh no, something went wrong: ${error}`);
+		process.stderr.write(`Oh no, something went wrong: ${error}`);
 		process.exit(1);
-	});
+	})
+);
+
+task();
