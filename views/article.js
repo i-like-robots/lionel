@@ -1,5 +1,4 @@
 const chalk = require('chalk');
-const wrap = require('word-wrap');
 
 const RHYTHM = '\n\n';
 
@@ -36,7 +35,7 @@ module.exports = (model) => {
 
 	template.push(subheader(model));
 
-	template.push(wrap(model.bodyText, { width: 80, indent: '' }));
+	template.push(model.bodyText);
 
 	template.push(chalk.yellow(`View the article at ${model.url}`));
 
