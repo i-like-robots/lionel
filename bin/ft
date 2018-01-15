@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
-const inquirer = require('inquirer');
-const ora = require('ora');
-
+const Menu = require('../lib/ui/menu');
 const Scrollable = require('../lib/ui/scrollable');
+
 const list = require('../controllers/list');
 const article = require('../controllers/article');
 
-const spinner = ora('Loading…');
+const spinner = require('ora')('Loading…');
 
 const title = (text) => {
 	process.stdout.write('\x1b]2;' + text + '\x1b\x5c');
@@ -20,14 +19,11 @@ const app = () => (
 		spinner.start();
 		return list();
 	})
-	.then(({ choices, message }) => {
+	.then((choices) => {
 		spinner.stop();
 
-		return inquirer.prompt({
-			message,
-			choices,
-			type: 'list',
-			name: 'guid'
+		return new Promise((resolve) => {
+			new Menu(choices, { callback: resolve });
 		});
 	})
 	.then(({ guid }) => {
@@ -41,8 +37,8 @@ const app = () => (
 			new Scrollable(content, { callback: resolve });
 		});
 	})
-	.then((quit) => {
-		return quit ? null : app();
+	.then(() => {
+		return app();
 	})
 );
 
