@@ -7,6 +7,7 @@
     "ft": "bin/ft"
   },
   "dependencies": {
+    "ansi-escapes": "^3.0.0",
     "chalk": "^2.3.0",
     "feedme": "^1.1.0",
     "log-update": "^2.3.0",
