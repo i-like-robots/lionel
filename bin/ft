@@ -3,7 +3,7 @@
 const inquirer = require('inquirer');
 const ora = require('ora');
 
-const Scrollable = require('../lib/scrollable');
+const Scrollable = require('../lib/ui/scrollable');
 const list = require('../controllers/list');
 const article = require('../controllers/article');
 
@@ -38,12 +38,11 @@ const app = () => (
 		spinner.stop();
 
 		return new Promise((resolve) => {
-			const scrollable = new Scrollable(content, resolve);
-			return scrollable.start();
+			new Scrollable(content, { callback: resolve });
 		});
 	})
-	.then((more) => {
-		return more && app();
+	.then((quit) => {
+		return quit ? null : app();
 	})
 );
 

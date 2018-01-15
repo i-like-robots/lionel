@@ -37,7 +37,7 @@ module.exports = (model) => {
 
 	template.push(model.bodyText);
 
-	template.push(chalk.yellow(`View the article at ${model.url}`));
+	template.push(chalk.yellow(`View the article in full at: ${model.url}`));
 
-	return RHYTHM + template.join(RHYTHM) + RHYTHM;
+	return template.join(RHYTHM);
 };
