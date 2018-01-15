@@ -1,8 +1,8 @@
-# 🗞 Command Lionel
+# Command Lionel
 
-The latest FT news in your terminal (if you're within OSB, anyway).
+🗞 The latest news from the Financial Times in your terminal.
 
-_This will not work in you're on the Financial Times network_.
+_This will not work if you're outside of the Financial Times network_.
 
 ## Installation
 
