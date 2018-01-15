@@ -19,11 +19,11 @@ const app = () => (
 		spinner.start();
 		return list();
 	})
-	.then((choices) => {
+	.then(({ prompt, choices }) => {
 		spinner.stop();
 
 		return new Promise((resolve) => {
-			new Menu(choices, { callback: resolve });
+			new Menu(prompt, choices, { callback: resolve });
 		});
 	})
 	.then(({ guid }) => {
