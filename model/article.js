@@ -10,7 +10,7 @@ class Article {
 	}
 
 	get byline () {
-		return this.data.byline.replace(/^by\s+/i, '').trim();
+		return this.data.byline ? this.data.byline.replace(/^by\s+/i, '').trim() : '';
 	}
 
 	get publishedDate () {

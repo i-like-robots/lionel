@@ -6,7 +6,10 @@ const header = (model) => {
 	const partial = [];
 
 	partial.push(chalk.bold.underline.blue(model.title));
-	partial.push(chalk.blueBright(model.byline));
+
+	if (model.byline) {
+		partial.push(chalk.blueBright(model.byline));
+	}
 
 	return partial.join('\n');
 };
