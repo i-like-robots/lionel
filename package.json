@@ -1,8 +1,10 @@
 {
   "name": "lionel",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "The FT in your terminal",
-  "main": "index.js",
+  "engines": {
+    "node": ">= 8.0.0"
+  },
   "bin": {
     "lionel": "bin/ft"
   },
@@ -19,6 +21,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Matt Hinchliffe",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:i-like-robots/lionel.git"
+  },
   "license": "ISC"
 }
