@@ -1,5 +1,7 @@
 const fetchRSS = require('../lib/fetch-rss');
 
+const IS_NEW = 1 * 60 * 60 * 1000;
+
 module.exports = () => {
 	return fetchRSS('https://www.ft.com/?format=rss')
 		.then((items) => {
@@ -8,7 +10,8 @@ module.exports = () => {
 			const choices = items.map((item) => (
 				{
 					name: item.title,
-					guid: item.guid.text
+					guid: item.guid.text,
+					new: Date.now() - Date.parse(item.pubdate) < IS_NEW,
 				}
 			));
 
