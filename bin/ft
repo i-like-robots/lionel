@@ -39,26 +39,18 @@ const app = async () => {
 	return app();
 };
 
-const task = () => (
-	Promise.resolve()
-
-	.then(() => {
-		return app();
-	})
-
-	.then(() => {
+const task = async () => {
+	try {
+		await app();
 		process.exit();
-	})
-	.catch((error) => {
+	} catch (error) {
 		if (spinner.isSpinning) {
 			spinner.fail();
 		}
 
-		console.error(error);
-
 		process.stderr.write(`Oh no, something went wrong: ${error}\n`);
 		process.exit(1);
-	})
-);
+	}
+};
 
 task();
