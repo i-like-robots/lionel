@@ -8,13 +8,15 @@ const isNew = (date) => {
 module.exports = async (uuid) => {
 	const prompt = `Latest news in ${listUUIDs.get(uuid)} at ${new Date().toTimeString()}`;
 
-	const listItems = await fetchList(uuid);
+	const items = await fetchList(uuid);
 
-	const choices = listItems.map((item) => {
+	const articles = items.filter((item) => item.type === 'article').slice(0, 10);
+
+	const choices = articles.map((article) => {
 		return {
-			name: item.title,
-			uuid: item.id,
-			new: isNew(item.publishedDate)
+			name: article.title,
+			uuid: article.id,
+			new: isNew(article.publishedDate)
 		};
 	});
 
