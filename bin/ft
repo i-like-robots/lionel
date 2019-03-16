@@ -3,14 +3,14 @@
 const Menu = require('../lib/ui/menu');
 const Scrollable = require('../lib/ui/scrollable');
 
-const sections = require('../controllers/sections');
-const list = require('../controllers/curated-list');
+const sectionList = require('../controllers/section-list');
+const articleList = require('../controllers/article-list');
 const article = require('../controllers/article');
 
 const spinner = require('ora')('Loading…');
 
 const app = async () => {
-	const sectionParams = await sections();
+	const sectionParams = await sectionList();
 
 	const selectedSection = await new Promise((resolve) => {
 		new Menu(sectionParams.prompt, sectionParams.choices, { callback: resolve });
@@ -18,7 +18,7 @@ const app = async () => {
 
 	spinner.start();
 
-	const listParams = await list(selectedSection.uuid);
+	const listParams = await articleList(selectedSection.uuid);
 
 	spinner.stop();
 
