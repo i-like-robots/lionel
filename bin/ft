@@ -3,40 +3,41 @@
 const Menu = require('../lib/ui/menu');
 const Scrollable = require('../lib/ui/scrollable');
 
-const list = require('../controllers/list');
+const sections = require('../controllers/sections');
+const list = require('../controllers/curated-list');
 const article = require('../controllers/article');
 
 const spinner = require('ora')('Loading…');
 
-const app = () => (
-	Promise.resolve()
+const app = async () => {
+	const sectionParams = await sections();
 
-	.then(() => {
-		spinner.start();
-		return list();
-	})
-	.then(({ prompt, choices }) => {
-		spinner.stop();
+	const selectedSection = await new Promise((resolve) => {
+		new Menu(sectionParams.prompt, sectionParams.choices, { callback: resolve });
+	});
 
-		return new Promise((resolve) => {
-			new Menu(prompt, choices, { callback: resolve });
-		});
-	})
-	.then(({ guid }) => {
-		spinner.start();
-		return article(guid);
-	})
-	.then((content) => {
-		spinner.stop();
+	spinner.start();
 
-		return new Promise((resolve) => {
-			new Scrollable(content, { callback: resolve });
-		});
-	})
-	.then(() => {
-		return app();
-	})
-);
+	const listParams = await list(selectedSection.uuid);
+
+	spinner.stop();
+
+	const selectedArticle = await new Promise((resolve) => {
+		new Menu(listParams.prompt, listParams.choices, { callback: resolve });
+	});
+
+	spinner.start();
+
+	const articleParams = await article(selectedArticle.uuid);
+
+	spinner.stop();
+
+	await new Promise((resolve) => {
+		new Scrollable(articleParams, { callback: resolve });
+	});
+
+	return app();
+};
 
 const task = () => (
 	Promise.resolve()
@@ -49,11 +50,13 @@ const task = () => (
 		process.exit();
 	})
 	.catch((error) => {
-		if (spinner.enabled) {
+		if (spinner.isSpinning) {
 			spinner.fail();
 		}
 
-		process.stderr.write(`Oh no, something went wrong: ${error}`);
+		console.error(error);
+
+		process.stderr.write(`Oh no, something went wrong: ${error}\n`);
 		process.exit(1);
 	})
 );
