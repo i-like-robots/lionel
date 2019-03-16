@@ -33,7 +33,7 @@ module.exports = (model) => {
 
 	template.push(chalk.yellow(`View the article in full at: ${model.url}`));
 
-	template.push(RHYTHM);
+	template.push('');
 
 	return template.join(RHYTHM);
 };

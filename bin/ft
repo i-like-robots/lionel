@@ -5,30 +5,30 @@ const Scrollable = require('../lib/ui/scrollable');
 
 const sectionList = require('../controllers/section-list');
 const articleList = require('../controllers/article-list');
-const article = require('../controllers/article');
+const viewArticle = require('../controllers/view-article');
 
 const spinner = require('ora')('Loading…');
 
 const app = async () => {
 	const sectionParams = await sectionList();
 
-	const selectedSection = await new Promise((resolve) => {
+	const section = await new Promise((resolve) => {
 		new Menu(sectionParams.prompt, sectionParams.choices, { callback: resolve });
 	});
 
 	spinner.start();
 
-	const listParams = await articleList(selectedSection.uuid);
+	const listParams = await articleList(section.uuid);
 
 	spinner.stop();
 
-	const selectedArticle = await new Promise((resolve) => {
+	const article = await new Promise((resolve) => {
 		new Menu(listParams.prompt, listParams.choices, { callback: resolve });
 	});
 
 	spinner.start();
 
-	const articleParams = await article(selectedArticle.uuid);
+	const articleParams = await viewArticle(article.uuid);
 
 	spinner.stop();
 
@@ -42,7 +42,6 @@ const app = async () => {
 const task = async () => {
 	try {
 		await app();
-		process.exit();
 	} catch (error) {
 		if (spinner.isSpinning) {
 			spinner.fail();
