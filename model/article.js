@@ -17,20 +17,6 @@ class Article {
 		return new Date(this.data.publishedDate).toLocaleString();
 	}
 
-	get displayConcept () {
-		return this.data.displayConcept && this.data.displayConcept.prefLabel;
-	}
-
-	get displayConceptPrefix () {
-		if (this.data.brandConcept && this.data.displayConcept.id !== this.data.brandConcept.id) {
-			return this.data.brandConcept.prefLabel;
-		}
-
-		if (this.data.genreConcept && this.data.displayConcept.id !== this.data.genreConcept.id) {
-			return this.data.genreConcept.prefLabel;
-		}
-	}
-
 	get bodyText () {
 		return unescape(this.data.bodyText);
 	}

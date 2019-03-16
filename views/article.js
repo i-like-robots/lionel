@@ -19,15 +19,6 @@ const subheader = (model) => {
 
 	partial.push(`Posted on ${chalk.bold(model.publishedDate)}`);
 
-	if (model.displayConcept) {
-		partial.push('in');
-		partial.push(chalk.bold(model.displayConcept));
-	}
-
-	if (model.displayConceptPrefix) {
-		partial.push(`(${chalk.magentaBright(model.displayConceptPrefix)})`);
-	}
-
 	return chalk.magenta(partial.join(' '));
 };
 
