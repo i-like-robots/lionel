@@ -6,7 +6,7 @@ const isNew = (date) => {
 };
 
 module.exports = async (uuid) => {
-	const prompt = `Latest news in ${listUUIDs.get(uuid)} at ${new Date().toTimeString()}`;
+	const prompt = `The latest in ${listUUIDs.get(uuid)} at ${new Date().toTimeString()}`;
 
 	const items = await fetchList(uuid);
 

@@ -1,7 +1,7 @@
 const listUUIDs = require('../lib/list-uuids');
 
 module.exports = () => {
-	const prompt = 'Select section to view latest news from FT.com';
+	const prompt = 'Select a section to view the latest news from FT.com';
 
 	const choices = [];
 
