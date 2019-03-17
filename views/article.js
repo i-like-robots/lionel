@@ -7,8 +7,8 @@ const header = (model) => {
 
 	partial.push(chalk.bold.underline.blue(model.title));
 
-	if (model.byline) {
-		partial.push(chalk.blueBright(model.byline));
+	if (model.standfirst) {
+		partial.push(chalk.bold.cyan(model.standfirst));
 	}
 
 	return partial.join('\n');
@@ -19,7 +19,13 @@ const subheader = (model) => {
 
 	partial.push(`Posted on ${chalk.bold(model.publishedDate)}`);
 
-	return chalk.magenta(partial.join(' '));
+	if (model.byline) {
+		partial.push(`Written by ${model.byline}`);
+	}
+
+	partial.push('');
+
+	return chalk.magenta(partial.join('. '));
 };
 
 module.exports = (model) => {

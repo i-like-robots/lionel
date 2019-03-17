@@ -6,11 +6,17 @@ class Article {
 	}
 
 	get title () {
-		return this.data.title;
+		return this.data.title.trim();
+	}
+
+	get standfirst () {
+		return this.data.standfirst.trim();
 	}
 
 	get byline () {
-		return this.data.byline ? this.data.byline.replace(/^by\s+/i, '').trim() : '';
+		if (this.data.byline) {
+			return this.data.byline.replace(/^by\s+/i, '').replace(/\.$/, '').trim();
+		}
 	}
 
 	get publishedDate () {
