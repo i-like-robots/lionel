@@ -1,4 +1,5 @@
 const unescape = require('unescape');
+const xmlToText = require('../lib/xml-to-text');
 
 class Article {
 	constructor (data) {
@@ -10,7 +11,9 @@ class Article {
 	}
 
 	get standfirst () {
-		return this.data.standfirst.trim();
+		if (this.data.standfirst) {
+			return this.data.standfirst.trim();
+		}
 	}
 
 	get byline () {
@@ -24,11 +27,12 @@ class Article {
 	}
 
 	get bodyText () {
-		return unescape(this.data.bodyText);
+		const text = xmlToText(this.data.bodyXML);
+		return unescape(text);
 	}
 
 	get url () {
-		return `https://www.ft.com/content/${this.data.id}`;
+		return this.data.webUrl;
 	}
 }
 
