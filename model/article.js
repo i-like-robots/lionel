@@ -1,4 +1,3 @@
-const unescape = require('unescape');
 const xmlToText = require('../lib/xml-to-text');
 
 class Article {
@@ -18,7 +17,7 @@ class Article {
 
 	get byline () {
 		if (this.data.byline) {
-			return this.data.byline.replace(/^by\s+/i, '').replace(/\.$/, '').trim();
+			return this.data.byline.trim().replace(/^by\s+/i, '').replace(/\.$/, '');
 		}
 	}
 
@@ -27,8 +26,7 @@ class Article {
 	}
 
 	get bodyText () {
-		const text = xmlToText(this.data.bodyXML);
-		return unescape(text);
+		return xmlToText(this.data.bodyXML);
 	}
 
 	get url () {
