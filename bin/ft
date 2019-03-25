@@ -3,59 +3,61 @@
 const Menu = require('../lib/ui/menu');
 const Scrollable = require('../lib/ui/scrollable');
 
-const list = require('../controllers/list');
-const article = require('../controllers/article');
+const sectionList = require('../controllers/section-list');
+const articleList = require('../controllers/article-list');
+const viewArticle = require('../controllers/view-article');
 
 const spinner = require('ora')('Loading…');
 
-const app = () => (
-	Promise.resolve()
+const app = async () => {
+	const sectionParams = await sectionList();
 
-	.then(() => {
-		spinner.start();
-		return list();
-	})
-	.then(({ prompt, choices }) => {
-		spinner.stop();
+	const section = await new Promise((resolve) => {
+		new Menu(sectionParams.prompt, sectionParams.choices, { callback: resolve });
+	});
 
-		return new Promise((resolve) => {
-			new Menu(prompt, choices, { callback: resolve });
-		});
-	})
-	.then(({ guid }) => {
-		spinner.start();
-		return article(guid);
-	})
-	.then((content) => {
-		spinner.stop();
+	spinner.start();
 
-		return new Promise((resolve) => {
-			new Scrollable(content, { callback: resolve });
-		});
-	})
-	.then(() => {
-		return app();
-	})
-);
+	const listParams = await articleList(section.uuid);
 
-const task = () => (
-	Promise.resolve()
+	spinner.stop();
 
-	.then(() => {
-		return app();
-	})
+	const article = await new Promise((resolve) => {
+		new Menu(listParams.prompt, listParams.choices, { callback: resolve });
+	});
 
-	.then(() => {
-		process.exit();
-	})
-	.catch((error) => {
-		if (spinner.enabled) {
+	spinner.start();
+
+	const articleParams = await viewArticle(article.uuid);
+
+	spinner.stop();
+
+	await new Promise((resolve) => {
+		new Scrollable(articleParams, { callback: resolve });
+	});
+
+	return app();
+};
+
+const task = async () => {
+	try {
+		const key = require('../lib/api-key')();
+
+		if (key) {
+			global.key = key;
+		} else {
+			throw Error('No API key found');
+		}
+
+		await app();
+	} catch (error) {
+		if (spinner.isSpinning) {
 			spinner.fail();
 		}
 
-		process.stderr.write(`Oh no, something went wrong: ${error}`);
+		process.stderr.write(`Oh no, something went wrong: ${error}\n`);
 		process.exit(1);
-	})
-);
+	}
+};
 
 task();
