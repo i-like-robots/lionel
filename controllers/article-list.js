@@ -6,7 +6,7 @@ const isNew = (date) => {
 };
 
 const isArticle = (content) => {
-	return content.type === 'http://www.ft.com/ontology/content/Article';
+	return content && content.type === 'http://www.ft.com/ontology/content/Article';
 };
 
 module.exports = async (uuid) => {
