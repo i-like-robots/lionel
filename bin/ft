@@ -41,6 +41,14 @@ const app = async () => {
 
 const task = async () => {
 	try {
+		const key = require('../lib/api-key')();
+
+		if (key) {
+			global.key = key;
+		} else {
+			throw Error('No API key found');
+		}
+
 		await app();
 	} catch (error) {
 		if (spinner.isSpinning) {
